@@ -33,4 +33,22 @@ O projeto inclui:
 * Orquestração em **Kubernetes**
 * Coleta de logs via **Filebeat**
 * Indexação no **Elasticsearch**
-* Visualização e análise no
+* Visualização e análise no **Kibana**
+
+---
+
+## Público-Alvo
+
+Este laboratório é voltado para profissionais e estudantes interessados em:
+
+* Observabilidade de sistemas distribuídos
+* Engenharia de plataforma
+* Operações de sistemas (SRE)
+* Arquitetura de microserviços
+* Monitoramento e análise de logs
+
+---
+
+## Abordagem
+
+O desenvolvimento será realizado de forma **incremental**, seguindo um roadmap estruturado que parte da definição do contrato de logs até a implementação completa da infraestrutura de observabilidade.
