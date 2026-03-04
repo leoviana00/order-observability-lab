@@ -1,61 +1,181 @@
+# Order Observability Lab
 
-# Projeto: Order Observability Lab
+## Visão Geral
 
-## 1️⃣ Introdução
+O **Order Observability Lab** é um projeto de estudo que demonstra a implementação de **observabilidade de logs em uma arquitetura de microserviços** utilizando **Spring Boot, Kubernetes e Elastic Stack**.
 
-O Order Observability Lab é um laboratório de microserviços desenvolvido em Java + Spring Boot, executando em Kubernetes, com foco exclusivo em gestão e observabilidade de logs utilizando Elastic Stack (Elasticsearch + Kibana) e Filebeat.
+O projeto simula um fluxo simples de negócio relacionado ao processamento de pedidos, permitindo observar como eventos e falhas se propagam entre serviços distribuídos e como essas informações podem ser coletadas, indexadas e analisadas por meio de ferramentas de observabilidade.
 
-A proposta é simular um fluxo real de negócio — criação de pedidos — envolvendo múltiplos serviços que produzem logs estruturados e correlacionados.
+O laboratório tem como foco principal a **gestão estruturada de logs**, aplicando boas práticas utilizadas em ambientes modernos de microserviços e plataformas de observabilidade.
 
+---
 
-## 2️⃣ Objetivo do projeto
+# Objetivos do Projeto
 
-O Order Observability Lab tem como objetivo construir um ambiente de estudo prático para gestão e observabilidade de logs em arquiteturas de microserviços, utilizando Java Spring Boot, Kubernetes e Elastic Stack.
+Este projeto tem como principais objetivos:
 
-O projeto simula um sistema distribuído simples composto por múltiplos serviços que se comunicam entre si durante o fluxo de criação de pedidos. Cada serviço gera logs estruturados em JSON, seguindo um contrato padronizado de logging, permitindo a coleta, indexação e análise centralizada dessas informações.
+* Implementar **logging estruturado padronizado**
+* Demonstrar **correlação distribuída de requisições**
+* Construir um **pipeline completo de ingestão de logs**
+* Permitir **análise centralizada de eventos e falhas**
+* Simular cenários operacionais para estudo de diagnóstico
 
-A iniciativa busca demonstrar, em escala reduzida, como implementar um pipeline completo de ingestão de logs, desde a geração nos microserviços até a visualização e análise em ferramentas de observabilidade.
+A solução foi projetada para reproduzir, em escala reduzida, padrões utilizados em ambientes de produção.
 
-Mais detalhes a respeito dos [objetivos](./docs/Objetivo.md)
+---
 
-## 3️⃣ Arquitetura geral
+# Arquitetura do Projeto
 
-Arquitetura Geral do Projeto
+O sistema é composto por múltiplos microserviços que processam requisições de pedidos e geram logs estruturados durante sua execução.
 
-O Order Observability Lab é estruturado como um sistema de microserviços executando em ambiente containerizado e orquestrado por Kubernetes, com um pipeline dedicado para ingestão, indexação e análise de logs.
+Fluxo principal de processamento:
 
-A arquitetura foi projetada para simular um fluxo real de negócio — criação de pedidos — permitindo observar como eventos e falhas se propagam entre serviços distribuídos e como essas informações podem ser coletadas e analisadas por meio de ferramentas de observabilidade
+```text
+Client → API Gateway → Order Service → Payment Service → Notification Service
+```
 
-Mais detalhes a respeito da [arquitetura](./docs/Arquitetura.md)
+Cada serviço gera logs estruturados contendo o mesmo identificador de correlação, permitindo reconstruir o fluxo completo da requisição.
 
-## 4️⃣ Fluxo de observabilidade 
+---
 
-Esta seção descreve como os eventos observáveis são gerados, coletados e analisados ao longo do fluxo de processamento de uma requisição no sistema.
+# Pipeline de Observabilidade
 
-O objetivo é garantir que cada etapa relevante da execução de uma requisição seja registrada por meio de logs estruturados, permitindo rastreamento distribuído, diagnóstico de falhas e análise operacional.
+Os logs produzidos pelos serviços são coletados e processados por uma stack de observabilidade baseada no Elastic Stack.
 
-Todos os logs seguem o Log Contract v1.1, garantindo consistência estrutural e capacidade de correlação entre serviços.
+Fluxo de ingestão de logs:
 
-Mais detalhes a respeito do [fluxo de obsevabilidade](./docs/FluxoLogs.md)
+```text
+Microservices → stdout → Filebeat → Elasticsearch → Kibana
+```
 
-## 5️⃣ Log Contract
+Componentes utilizados:
 
-O Log Contract define o padrão oficial de estrutura e conteúdo dos logs produzidos pelos microserviços do projeto.
-Seu objetivo é garantir consistência, rastreabilidade e capacidade de análise dos logs dentro do pipeline de observabilidade.
+* **Filebeat** – coleta logs dos containers
+* **Elasticsearch** – indexação e armazenamento
+* **Kibana** – visualização e análise de logs
 
-Todos os serviços do sistema devem gerar logs estruturados em JSON, seguindo este contrato.
+---
 
-Mais detalhes do [Log Contract](./docs/LogContractV1.md)
+# Estrutura do Projeto
 
-## 6️⃣ Roadmap de implementação
+O repositório está organizado da seguinte forma:
 
-Este roadmap define as etapas necessárias para construção do Order Observability Lab, desde a definição do padrão de logs até a implementação completa do pipeline de observabilidade.
+```text
+order-observability-lab
+│
+├── services
+│   ├── api-gateway
+│   ├── order-service
+│   ├── payment-service
+│   └── notification-service
+│
+├── observability
+│   ├── elasticsearch
+│   ├── kibana
+│   └── filebeat
+│
+├── infrastructure
+│   ├── docker
+│   └── kubernetes
+│
+├── docs
+│   ├── architecture
+│   ├── observability
+│   ├── log-contract
+│   └── roadmap
+│
+└── README.md
+```
 
-O desenvolvimento será realizado de forma incremental, permitindo validar cada componente antes da evolução para as próximas fases. Mais detalhes das [objetivos, atividades, entregáveis e dependências](./docs/RoadmapDeImplementacao.md)
+Essa estrutura visa separar e organizar:
 
-### Status Geral do Projeto
+* **código de aplicação**
+* **infraestrutura**
+* **configuração de observabilidade**
+* **documentação**
 
-Utilize a checklist abaixo para acompanhar o progresso da implementação.
+---
+
+# Log Contract
+
+Todos os microserviços seguem um contrato de logs estruturados definido no projeto.
+
+O contrato estabelece:
+
+* estrutura padrão dos logs
+* campos obrigatórios
+* classificação de eventos
+* estratégia de indexação
+* política de log levels
+
+Documento completo disponível em:
+
+```
+docs/log-contract/log-contract-v1.1.md
+```
+
+---
+
+# Roadmap de Implementação
+
+O desenvolvimento do laboratório segue um roadmap incremental composto por oito fases:
+
+1. Fundamentos de Logging
+2. Implementação do Primeiro Serviço
+3. Containerização
+4. Pipeline de Logs
+5. Kubernetes
+6. Arquitetura Distribuída
+7. Observabilidade Operacional
+8. Maturidade de Logs
+
+Detalhes completos disponíveis em:
+
+```
+docs/roadmap/roadmap.md
+```
+
+---
+
+# Tecnologias Utilizadas
+
+O projeto utiliza as seguintes tecnologias:
+
+* **Java 17**
+* **Spring Boot**
+* **Docker**
+* **Kubernetes**
+* **Filebeat**
+* **Elasticsearch**
+* **Kibana**
+
+Essas ferramentas compõem uma stack amplamente utilizada para observabilidade em arquiteturas de microserviços.
+
+---
+
+# Resultados Esperados
+
+Ao final da implementação, o laboratório permitirá:
+
+* rastrear requisições entre múltiplos serviços
+* identificar erros técnicos e eventos de negócio
+* analisar latência de operações
+* visualizar logs em dashboards no Kibana
+* simular cenários de falha para estudo operacional
+
+---
+
+# Como Executar o Projeto
+
+As instruções detalhadas de execução serão adicionadas conforme as fases do roadmap forem concluídas.
+
+O objetivo é permitir a execução do ambiente tanto em **Docker Compose (local)** quanto em **Kubernetes**.
+
+---
+
+# Status do Projeto
+
+Progresso atual:
 
 * [x] Fase 1 — Fundamentos de Logging
 * [ ] Fase 2 — Implementação do Primeiro Serviço
@@ -65,6 +185,17 @@ Utilize a checklist abaixo para acompanhar o progresso da implementação.
 * [ ] Fase 6 — Arquitetura Distribuída
 * [ ] Fase 7 — Observabilidade Operacional
 * [ ] Fase 8 — Maturidade de Logs
+
 ---
 
-<div align="center">DevOps <a href="https://github.com/leoviana00">Leonardo Viana</a>.</div>
+# Contribuição
+
+Este projeto é um laboratório educacional voltado para estudo de observabilidade em sistemas distribuídos.
+
+Sugestões de melhorias e experimentações são bem-vindas.
+
+---
+
+# Licença
+
+Este projeto é disponibilizado para fins educacionais.
