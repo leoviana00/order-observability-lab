@@ -1,0 +1,43 @@
+<configuration>
+
+    <appender name="jsonAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+
+            <providers>
+
+                <timestamp>
+                    <fieldName>@timestamp</fieldName>
+                </timestamp>
+
+                <logLevel>
+                    <fieldName>log.level</fieldName>
+                </logLevel>
+
+                <message/>
+
+                <mdc/>
+
+                <pattern>
+                    <pattern>
+                        {
+                        "service.name": "order-service",
+                        "service.version": "${service.version:-1.0.0}",
+                        "environment": "${environment:-local}"
+                        }
+                    </pattern>
+                </pattern>
+
+                <stackTrace>
+                    <fieldName>error.stack_trace</fieldName>
+                </stackTrace>
+
+            </providers>
+
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="jsonAppender"/>
+    </root>
+
+</configuration>
