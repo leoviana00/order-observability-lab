@@ -1,0 +1,21 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+  - add_docker_metadata: ~
+
+  - decode_json_fields:
+      fields: ["log"]
+      target: ""
+      overwrite_keys: true
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  index: "logs-%{[docker.container.name]}-%{+yyyy.MM.dd}"
+
+setup.template.name: "logs"
+setup.template.pattern: "logs-*"
+
+logging.level: info
